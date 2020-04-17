@@ -16,7 +16,6 @@ import java.util.Map;
  * https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_1
  *
  * @author mio
- * @date 2019/10/8 9:22
  */
 public class WxpayServiceImpl implements WxpayService {
 

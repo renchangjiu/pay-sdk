@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * 这是一个标记注释，没有特定的属性。
  *
  * @author mio
- * @date 2020/3/6 16:15
+ * @since 0.1
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)

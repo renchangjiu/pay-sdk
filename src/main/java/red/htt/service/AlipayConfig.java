@@ -42,15 +42,18 @@ public abstract class AlipayConfig {
 
     /**
      * 获取签名方式
+     * @return signType
      */
-    public String getSignType() {
+    public final String getSignType() {
         return "RSA2";
     }
 
     /**
      * 获取字符编码格式
+     *
+     * @return charset
      */
-    public String getCharset() {
+    public final String getCharset() {
         return "utf-8";
     }
 

@@ -9,7 +9,6 @@ import java.math.BigInteger;
 
 /**
  * @author mio
- * @date 2020/4/15 9:42
  */
 @Data
 @Accessors(chain = true)

@@ -6,12 +6,11 @@ import java.math.BigDecimal;
 
 /**
  * @author mio
- * @date 2019/12/20 11:03
  */
 public class MoneyUtils {
 
     /**
-     * 分 -> 元, 保留两位小数
+     * 分(整型) to 元(保留两位小数)
      */
     public static String penny2yuan(String value) {
         if (StringUtils.isEmpty(value)) {
@@ -23,7 +22,7 @@ public class MoneyUtils {
     }
 
     /**
-     * 元(精确到小数点后两位) -> 分(整数)
+     * 元(保留两位小数) to 分(整型)
      */
     public static int yuan2penny(double yuan) {
         if (yuan == 0) {

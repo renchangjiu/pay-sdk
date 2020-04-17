@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * 这是一个标记注释，没有特定属性。
  *
  * @author mio
- * @date 2020/3/6 16:15
+ * @since 0.1
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})

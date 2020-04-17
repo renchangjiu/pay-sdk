@@ -3,13 +3,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>red.htt</groupId>
     <artifactId>pay-sdk</artifactId>
     <version>0.1</version>
 
     <name>pay-sdk</name>
-    <url>http://www.example.com</url>
+    <description>整合微信支付及支付宝支付</description>
+    <url>https://github.com/renchangjiu/pay-sdk</url>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,6 +61,11 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -83,4 +94,29 @@
             </plugin>
         </plugins>
     </build>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <tag>master</tag>
+        <url>https://github.com/renchangjiu/pay-sdk</url>
+        <connection>scm:git:https://github.com/renchangjiu/pay-sdk.git</connection>
+        <developerConnection>scm:git:git@github.com:renchangjiu/pay-sdk.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>mio</name>
+            <email>1359581862@qq.com</email>
+            <organization>red.htt</organization>
+            <url>https://github.com/renchangjiu/pay-sdk</url>
+        </developer>
+    </developers>
+
 </project>
