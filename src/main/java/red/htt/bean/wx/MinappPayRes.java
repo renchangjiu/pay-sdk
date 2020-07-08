@@ -1,4 +1,4 @@
-package red.htt.bean;
+package red.htt.bean.wx;
 
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class MinappUnifiedOrderRespVO {
+public class MinappPayRes {
     /**
      * 时间戳从1970年1月1日00:00:00至今的秒数,即当前的时间
      */

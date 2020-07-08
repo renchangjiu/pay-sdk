@@ -1,4 +1,4 @@
-package red.htt.bean;
+package red.htt.bean.wx;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class NativeUnifiedOrderRespVO {
+public class NativePayRes {
 
     /**
      * 是否成功

@@ -1,10 +1,7 @@
 package red.htt.bean;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.math.BigInteger;
 
 
 /**
@@ -14,6 +11,9 @@ import java.math.BigInteger;
 @Accessors(chain = true)
 public class Order {
 
+    /**
+     * 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|* 且在同一个商户号下唯一。
+     */
     private String id;
 
     /**

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class NotifyRespVO {
+public class NotifyRes {
 
     /**
      * 是否验证通过

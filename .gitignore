@@ -39,3 +39,6 @@ hs_err_pid*
 *.iws
 *.iml
 *.ipr
+
+
+/src/test/java/red/htt/WxpayConfigImpl.java

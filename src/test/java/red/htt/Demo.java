@@ -6,5 +6,7 @@ public class Demo {
 
     @Test
     public void mio() {
+
+        System.out.println();
     }
 }

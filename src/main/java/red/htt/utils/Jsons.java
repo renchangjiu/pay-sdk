@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author su
  */
-public class JsonUtils {
+public class Jsons {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
