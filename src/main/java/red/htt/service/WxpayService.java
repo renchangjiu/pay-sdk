@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import red.htt.bean.*;
 import red.htt.bean.wx.MinappPayRes;
 import red.htt.bean.wx.NativePayRes;
+import red.htt.bean.wx.WxpayOrder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
@@ -13,29 +14,27 @@ import java.util.Map;
 
 /**
  * @author mio
- * @see " https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_1"
+ * @see "https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_1"
  */
 public class WxpayService {
 
     private final WXPayConfig config;
 
     public WxpayService(WXPayConfig config) {
-        InnerWxpayConfigImpl con = new InnerWxpayConfigImpl()
-                .setAppId(config.getAppID())
-                .setMchId(config.getMchID())
-                .setNotifyUrl(config.getNotifyUrl())
-                .setUseSandbox(config.useSandbox())
-                .setCertStream(config.getCertStream())
-                .setHttpConnectTimeoutMs(config.getHttpConnectTimeoutMs())
-                .setHttpReadTimeoutMs(config.getHttpReadTimeoutMs())
-                .setwXPayDomain(config.getWXPayDomain())
-                .setShouldAutoReport(config.shouldAutoReport())
-                .setReportWorkerNum(config.getReportWorkerNum())
-                .setReportQueueMaxSize(config.getReportQueueMaxSize())
-                .setReportBatchSize(config.getReportBatchSize());
-        if (config.useSandbox()) {
-            con.setKey(this.getSandboxKey(config));
-        }
+        InnerWxpayConfigImpl con = new InnerWxpayConfigImpl();
+        con.appId = config.getAppID();
+        con.mchId = config.getMchID();
+        con.key = config.useSandbox() ? this.getSandboxKey(config) : config.getKey();
+        con.notifyUrl = config.getNotifyUrl();
+        con.useSandbox = config.useSandbox();
+        con.certStream = config.getCertStream();
+        con.httpConnectTimeoutMs = config.getHttpConnectTimeoutMs();
+        con.httpReadTimeoutMs = config.getHttpReadTimeoutMs();
+        con.wXPayDomain = config.getWXPayDomain();
+        con.shouldAutoReport = config.shouldAutoReport();
+        con.reportWorkerNum = config.getReportWorkerNum();
+        con.reportQueueMaxSize = config.getReportQueueMaxSize();
+        con.reportBatchSize = config.getReportBatchSize();
         this.config = con;
     }
 
@@ -43,16 +42,16 @@ public class WxpayService {
      * NATIVE 支付<br>
      * 请求微信统一下单接口
      *
-     * @param order order
+     * @param wxpayOrder wxpayOrder
      * @return NativePayRes
      * @see "https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=6_1"
      */
-    public NativePayRes nativePay(Order order) {
+    public NativePayRes nativePay(WxpayOrder wxpayOrder) {
         NativePayRes res = new NativePayRes();
         res.setSuccess(false);
         try {
             WXPay wxpay = new WXPay(config, config.getNotifyUrl(), true, config.useSandbox());
-            Map<String, String> data = this.genUnifiedOrderData(order, "NATIVE");
+            Map<String, String> data = this.genUnifiedOrderData(wxpayOrder, "NATIVE");
             Map<String, String> rm = wxpay.unifiedOrder(data);
             String returnCode = rm.getOrDefault("return_code", "").toUpperCase();
             String returnMsg = rm.getOrDefault("return_msg", "");
@@ -77,15 +76,15 @@ public class WxpayService {
      * 小程序支付
      * 请求微信统一下单接口
      *
-     * @param order  order
+     * @param wxpayOrder  wxpayOrder
      * @param openId openId
      * @return Result
      * @see "https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_3&index=1"
      */
-    public Result<MinappPayRes> minappPay(Order order, String openId) {
+    public Result<MinappPayRes> minappPay(WxpayOrder wxpayOrder, String openId) {
         try {
             WXPay wxpay = new WXPay(config);
-            Map<String, String> data = this.genUnifiedOrderData(order, "JSAPI");
+            Map<String, String> data = this.genUnifiedOrderData(wxpayOrder, "JSAPI");
             data.put("openid", openId);
             Map<String, String> resp = wxpay.unifiedOrder(data);
 
@@ -171,17 +170,17 @@ public class WxpayService {
      * @param tradeType 交易类型, JSAPI--JSAPI支付（或小程序支付）、NATIVE--Native支付、APP--app支付，MWEB--H5支付
      * @see "https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1#"
      */
-    private Map<String, String> genUnifiedOrderData(Order order, String tradeType) {
+    private Map<String, String> genUnifiedOrderData(WxpayOrder wxpayOrder, String tradeType) {
         Map<String, String> data = new HashMap<>();
-        data.put("body", order.getBody());
-        data.put("out_trade_no", order.getId());
+        data.put("body", wxpayOrder.getBody());
+        data.put("out_trade_no", wxpayOrder.getId());
         data.put("device_info", "");
-        data.put("fee_type", order.getFeeType());
-        data.put("total_fee", order.getPrice());
+        data.put("fee_type", wxpayOrder.getFeeType());
+        data.put("total_fee", wxpayOrder.getPrice());
         data.put("spbill_create_ip", "123.12.12.123");
         data.put("notify_url", config.getNotifyUrl());
         data.put("trade_type", tradeType);
-        data.put("product_id", order.getId());
+        data.put("product_id", wxpayOrder.getId());
         return data;
     }
 
@@ -238,16 +237,6 @@ public class WxpayService {
             return appId;
         }
 
-        public InnerWxpayConfigImpl setAppId(String appId) {
-            this.appId = appId;
-            return this;
-        }
-
-
-        public InnerWxpayConfigImpl setMchId(String mchId) {
-            this.mchId = mchId;
-            return this;
-        }
 
         @Override
         public String getMchID() {
@@ -260,39 +249,22 @@ public class WxpayService {
             return this.key;
         }
 
-        public InnerWxpayConfigImpl setKey(String key) {
-            this.key = key;
-            return this;
-        }
 
         @Override
         public String getNotifyUrl() {
             return notifyUrl;
         }
 
-        public InnerWxpayConfigImpl setNotifyUrl(String notifyUrl) {
-            this.notifyUrl = notifyUrl;
-            return this;
-        }
 
         @Override
         public boolean useSandbox() {
             return this.useSandbox;
         }
 
-        public InnerWxpayConfigImpl setUseSandbox(boolean useSandbox) {
-            this.useSandbox = useSandbox;
-            return this;
-        }
 
         @Override
         public InputStream getCertStream() {
             return this.certStream;
-        }
-
-        public InnerWxpayConfigImpl setCertStream(InputStream certStream) {
-            this.certStream = certStream;
-            return this;
         }
 
 
@@ -301,31 +273,16 @@ public class WxpayService {
             return this.httpConnectTimeoutMs;
         }
 
-        public InnerWxpayConfigImpl setHttpConnectTimeoutMs(int httpConnectTimeoutMs) {
-            this.httpConnectTimeoutMs = httpConnectTimeoutMs;
-            return this;
-        }
-
 
         @Override
         public int getHttpReadTimeoutMs() {
             return this.httpReadTimeoutMs;
         }
 
-        public InnerWxpayConfigImpl setHttpReadTimeoutMs(int httpReadTimeoutMs) {
-            this.httpReadTimeoutMs = httpReadTimeoutMs;
-            return this;
-        }
 
         @Override
         public IWXPayDomain getWXPayDomain() {
             return this.wXPayDomain;
-        }
-
-
-        public InnerWxpayConfigImpl setwXPayDomain(IWXPayDomain wXPayDomain) {
-            this.wXPayDomain = wXPayDomain;
-            return this;
         }
 
 
@@ -335,40 +292,23 @@ public class WxpayService {
         }
 
 
-        public InnerWxpayConfigImpl setShouldAutoReport(boolean shouldAutoReport) {
-            this.shouldAutoReport = shouldAutoReport;
-            return this;
-        }
-
-
         @Override
         public int getReportWorkerNum() {
             return reportWorkerNum;
         }
 
-        public InnerWxpayConfigImpl setReportWorkerNum(int reportWorkerNum) {
-            this.reportWorkerNum = reportWorkerNum;
-            return this;
-        }
 
         @Override
         public int getReportQueueMaxSize() {
             return reportQueueMaxSize;
         }
 
-        public InnerWxpayConfigImpl setReportQueueMaxSize(int reportQueueMaxSize) {
-            this.reportQueueMaxSize = reportQueueMaxSize;
-            return this;
-        }
 
         @Override
         public int getReportBatchSize() {
             return reportBatchSize;
         }
 
-        public InnerWxpayConfigImpl setReportBatchSize(int reportBatchSize) {
-            this.reportBatchSize = reportBatchSize;
-            return this;
-        }
+
     }
 }

@@ -21,7 +21,7 @@ public class NotifyRes {
     private String errorMsg;
 
     /**
-     * 若通过, 则有 orderId
+     * 若通过, 则有订单ID
      */
     private String orderId;
 

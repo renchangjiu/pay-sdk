@@ -1,4 +1,4 @@
-package red.htt.bean;
+package red.htt.bean.wx;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class Order {
+public class WxpayOrder {
 
     /**
      * 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|* 且在同一个商户号下唯一。

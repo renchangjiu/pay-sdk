@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class Result<T> {
+
     /**
      * 是否成功
      */
